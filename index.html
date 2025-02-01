@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bannière LinkedIn</title>
+    <style>
+      body {
+        text-align: center;
+        font-family: Arial, sans-serif;
+        background-color: #000000;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+      }
+      canvas {
+        border: none;
+        display: block;
+        background: #000000;
+        box-shadow: 0px 0px 30px rgba(0, 255, 0, 0.3); /* Vert fluo */
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="color: #00ff00">Générateur de Bannière LinkedIn</h1>
+    <canvas id="bannerCanvas" width="1584" height="396"></canvas>
+    <br />
+    <button onclick="downloadBanner()">Télécharger</button>
+
+    <script>
+      const canvas = document.getElementById("bannerCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // Fond noir élégant avec un dégradé subtil
+      const gradient = ctx.createLinearGradient(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      gradient.addColorStop(0, "#000000");
+      gradient.addColorStop(1, "#1a1a1a");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Grille discrète
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+      for (let i = 0; i < canvas.width; i += 50) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, canvas.height);
+        ctx.stroke();
+      }
+      for (let i = 0; i < canvas.height; i += 50) {
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(canvas.width, i);
+        ctx.stroke();
+      }
+
+      // Texte principal en vert fluo
+      ctx.font = "bold 60px Arial";
+      ctx.fillStyle = "#00ff00";
+      ctx.textAlign = "right";
+      const mainText = "Concepteur d'applications JS React";
+      const mainTextX = canvas.width - 100;
+      const mainTextY = 100;
+      ctx.fillText(mainText, mainTextX, mainTextY);
+
+      // Tags avec effet 3D
+      const tags = ["+ Je conçois", "+ Je code", "+ J’innove"];
+      let tagX = canvas.width - tags.length * (200 + 20) - 100;
+      const tagWidth = 200;
+      const tagHeight = 60;
+
+      tags.forEach((tag) => {
+        // Ombre portée pour l'effet 3D
+        ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
+
+        // Dégradé vertical pour le relief
+        const gradient = ctx.createLinearGradient(
+          tagX,
+          140,
+          tagX,
+          140 + tagHeight
+        );
+        gradient.addColorStop(0, "#00ff00"); // Vert fluo
+        gradient.addColorStop(1, "#00a152"); // Vert plus foncé
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(tagX, 140, tagWidth, tagHeight);
+
+        // Bordure légère pour accentuer l'effet 3D
+        ctx.strokeStyle = "#00ff00";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(tagX, 140, tagWidth, tagHeight);
+
+        // Texte en blanc avec ombre
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 30px Arial";
+        ctx.textAlign = "center";
+        ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+        ctx.shadowBlur = 5;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+        ctx.fillText(tag, tagX + tagWidth / 2, 180);
+
+        // Réinitialiser l'ombre pour les autres éléments
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+
+        tagX += tagWidth + 20;
+      });
+
+      // Petits tags pour les technologies avec des couleurs variées, alignés à droite
+      const techTags = ["HTML5", "CSS", "JS", "React"];
+      const techTagWidth = 120;
+      const techTagHeight = 40;
+      const techTagSpacing = 20;
+
+      // Calculer la position de départ pour aligner les tags à droite
+      let techTagX =
+        canvas.width - techTags.length * (techTagWidth + techTagSpacing) - 100;
+
+      const techColors = ["#ff6f61", "#6b5b95", "#88b04b", "#f7cac9"]; // Couleurs variées
+
+      techTags.forEach((tech, index) => {
+        const gradient = ctx.createLinearGradient(
+          techTagX,
+          250,
+          techTagX + techTagWidth,
+          250
+        );
+        gradient.addColorStop(0, techColors[index]); // Couleur variée
+        gradient.addColorStop(1, "#ffffff"); // Blanc
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(techTagX, 250, techTagWidth, techTagHeight);
+
+        ctx.fillStyle = "#000000"; // Texte en noir pour contraster
+        ctx.font = "bold 20px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(tech, techTagX + techTagWidth / 2, 275);
+
+        techTagX += techTagWidth + techTagSpacing;
+      });
+
+      // Phrase inspirante avec une couleur différente
+      const slogan = "     Construisons le futur ensemble.";
+      ctx.fillStyle = "#6b5b95"; // Violet
+      ctx.font = "italic bold 40px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(slogan, canvas.width / 2, canvas.height - 30);
+
+      // Fonction de téléchargement
+      function downloadBanner() {
+        const link = document.createElement("a");
+        link.download = "banniere_linkedin.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      }
+    </script>
+  </body>
+</html>
